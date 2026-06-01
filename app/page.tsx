@@ -45,6 +45,26 @@ const formatDate = (dateString: string): string => {
     day: 'numeric' 
   });
 };
+// Add this navigation bar to your main page or create a new navigation component
+const Navigation = () => (
+  <nav className="bg-white shadow-md mb-8 p-4">
+    <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div className="flex items-center gap-2">
+        <span className="font-bold text-xl text-gray-800">📚</span>
+        <span className="text-gray-600">Week 1 Challenge</span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <a href="/" className="px-3 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700">Home</a>
+        <a href="/auth" className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">Auth</a>
+        <a href="/blog" className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">Blog</a>
+        <a href="/store" className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">Store</a>
+        <a href="/social" className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">Social</a>
+        <a href="/analytics" className="px-3 py-1 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300">Analytics</a>
+        <a href="/api-test" className="px-3 py-1 bg-purple-600 text-white rounded-md text-sm hover:bg-purple-700">API Test</a>
+      </div>
+    </div>
+  </nav>
+);
 
 // --- Initial Mock Data ---
 const getInitialTasks = (): Task[] => {
