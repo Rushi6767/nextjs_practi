@@ -243,6 +243,18 @@ const generateTenantId = (): string => {
   return `TNT-${random}`;
 };
 
+// Placeholder image URLs
+const propertyImages = [
+  'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop',
+];
+
 // --- Mock Data Generation ---
 const generateMockProperties = (): Property[] => {
   const propertyTypes = ['residential', 'commercial', 'residential', 'residential', 'commercial', 'industrial'] as const;
@@ -282,7 +294,7 @@ const generateMockProperties = (): Property[] => {
       price: Math.round(rentAmount * 120),
       rentAmount,
       currency: 'USD',
-      images: [`https://images.unsplash.com/photo-${1568605114967-8130f3a36994 + i}?w=400&h=300&fit=crop`],
+      images: [propertyImages[i % propertyImages.length]],
       documents: [],
       ownerId: 'owner1',
       ownerName: 'Jane Doe',
@@ -498,20 +510,25 @@ export default function RealEstatePage() {
 
     // Generate mock maintenance requests
     const mockMaintenance: MaintenanceRequest[] = [];
-    mockProperties.slice(0, 5).forEach(prop => {
+    mockProperties.slice(0, 5).forEach((prop, idx) => {
       const tenant = mockTenants.find(t => t.id === prop.tenants[0]);
       if (tenant) {
+        const priorities: ('low' | 'medium' | 'high' | 'emergency')[] = ['low', 'medium', 'high', 'emergency'];
+        const categories: ('plumbing' | 'electrical' | 'hvac' | 'appliance' | 'structural' | 'pest' | 'other')[] = 
+          ['plumbing', 'electrical', 'hvac', 'appliance', 'structural', 'pest', 'other'];
+        const titles = ['Plumbing Issue', 'Electrical Problem', 'HVAC Maintenance', 'Appliance Repair', 'Structural Repair', 'Pest Control'];
+        
         mockMaintenance.push({
           id: generateId(),
           propertyId: prop.id,
           propertyName: prop.name,
           tenantId: tenant.id,
           tenantName: `${tenant.firstName} ${tenant.lastName}`,
-          title: ['Plumbing Issue', 'Electrical Problem', 'HVAC Maintenance', 'Appliance Repair'][mockMaintenance.length % 4],
-          description: 'Description of the maintenance issue',
-          priority: ['low', 'medium', 'high', 'emergency'][mockMaintenance.length % 4] as any,
-          category: ['plumbing', 'electrical', 'hvac', 'appliance'][mockMaintenance.length % 4] as any,
-          status: ['submitted', 'in-progress', 'completed'][mockMaintenance.length % 3] as any,
+          title: titles[idx % titles.length],
+          description: `Description of the maintenance issue for ${prop.name}`,
+          priority: priorities[idx % priorities.length],
+          category: categories[idx % categories.length],
+          status: ['submitted', 'in-progress', 'completed', 'assigned'][idx % 4] as any,
           cost: Math.round((Math.random() * 500 + 50) * 100) / 100,
           notes: 'Maintenance notes',
           images: [],
@@ -621,7 +638,7 @@ export default function RealEstatePage() {
       price: propertyForm.price || 0,
       rentAmount: propertyForm.rentAmount || 0,
       currency: 'USD',
-      images: [],
+      images: propertyForm.images || [propertyImages[0]],
       documents: [],
       ownerId: currentUser?.id || 'owner1',
       ownerName: currentUser?.fullName || 'Jane Doe',
@@ -984,7 +1001,7 @@ export default function RealEstatePage() {
             <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="h-48 bg-gray-200 relative">
                 <img 
-                  src={property.images[0] || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop'} 
+                  src={property.images[0] || propertyImages[0]} 
                   alt={property.name}
                   className="w-full h-full object-cover"
                 />
